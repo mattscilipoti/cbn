@@ -1,0 +1,68 @@
+/ This view is for the shared image display
+h2 = @image.title
+
+- if @image.completed?
+  .image-tabs
+    button.active onclick="showImage('pixelated')" id="pixelated-tab" Pixelated
+    button onclick="showImage('paint_by_number')" id="paint-tab" Paint-by-Number
+  
+  .image-display
+    - if @image.pixelated_image.attached?
+      = image_tag @image.pixelated_image, alt: "#{@image.title} - Pixelated", id: "pixelated-image"
+    - if @image.paint_by_number_image.attached?
+      = image_tag @image.paint_by_number_image, alt: "#{@image.title} - Paint by Number", id: "paint-image", style: "display: none;"
+  
+  .share-section
+    h3 Share this paint-by-number:
+    .share-url = request.original_url
+    small Copy this URL to share with friends!
+  
+  .download-section
+    h3 Download Your Artwork:
+    = link_to "Download Pixelated Version", download_image_path(@image.share_token, type: 'pixelated'), class: "btn"
+    = link_to "Download Paint-by-Number", download_image_path(@image.share_token, type: 'paint_by_number'), class: "btn btn-secondary"
+  
+  p style="text-align: center; margin-top: 30px;"
+    small 
+      | Colors used: #{@image.color_count} | 
+      | Size: #{@image.width}×#{@image.height} pixels | 
+      | Pixel size: #{@image.pixel_size}×#{@image.pixel_size}
+
+- elsif @image.processing?
+  .image-display
+    p style="text-align: center; font-size: 18px; color: #007bff;"
+      | 🎨 Processing your image...
+    p style="text-align: center; color: #666;"
+      | This may take a few moments. Please refresh the page to check progress.
+
+- elsif @image.failed?
+  .alert.alert-error
+    | Sorry, there was an error processing your image. Please try uploading a different image.
+
+- else
+  .alert.alert-error
+    | Image not found or not ready.
+
+.download-section
+  = link_to "Create Another Paint-by-Number", new_image_path, class: "btn"
+  = link_to "View Gallery", root_path, class: "btn btn-secondary"
+
+javascript:
+  function showImage(type) {
+    // Hide all images
+    document.getElementById('pixelated-image').style.display = 'none';
+    document.getElementById('paint-image').style.display = 'none';
+    
+    // Remove active class from all tabs
+    document.getElementById('pixelated-tab').classList.remove('active');
+    document.getElementById('paint-tab').classList.remove('active');
+    
+    // Show selected image and activate tab
+    if (type === 'pixelated') {
+      document.getElementById('pixelated-image').style.display = 'block';
+      document.getElementById('pixelated-tab').classList.add('active');
+    } else {
+      document.getElementById('paint-image').style.display = 'block';
+      document.getElementById('paint-tab').classList.add('active');
+    }
+  }

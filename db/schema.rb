@@ -10,5 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_10_052354) do
+  create_table "images", force: :cascade do |t|
+    t.string "title"
+    t.string "original_filename"
+    t.string "pixelated_filename"
+    t.string "paint_by_number_filename"
+    t.string "share_token"
+    t.string "status"
+    t.integer "width"
+    t.integer "height"
+    t.integer "pixel_size"
+    t.integer "color_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["share_token"], name: "index_images_on_share_token"
+  end
 end

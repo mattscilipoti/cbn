@@ -1,0 +1,23 @@
+h2 Create Your Paint-by-Number
+
+= form_with(model: @image, local: true, html: { multipart: true }) do |form|
+  .form-group
+    = form.label :title, "Title for your artwork:"
+    = form.text_field :title, placeholder: "Enter a title for your paint-by-number"
+  
+  .form-group
+    = form.label :original_image, "Choose an image:"
+    = form.file_field :original_image, accept: "image/*", required: true
+    small style="color: #666; margin-top: 5px; display: block;"
+      | Upload a JPG, PNG, or GIF image. Best results with clear, high-contrast images.
+  
+  .form-group style="text-align: center; margin-top: 30px;"
+    = form.submit "Create Paint-by-Number", class: "btn"
+    = link_to "Cancel", root_path, class: "btn btn-secondary", style: "margin-left: 10px;"
+
+- if @image.errors.any?
+  .alert.alert-error
+    strong There were some problems:
+    ul style="margin: 10px 0 0 20px;"
+      - @image.errors.full_messages.each do |message|
+        li = message
