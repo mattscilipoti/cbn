@@ -1,0 +1,35 @@
+{
+	"name": "Color by Number Rails App",
+	"dockerFile": "../Dockerfile.dev",
+	"context": "..",
+	"shutdownAction": "stopContainer",
+	"service": "app",
+	"workspaceFolder": "/workspace",
+	"forwardPorts": [3000],
+	"portsAttributes": {
+		"3000": {
+			"label": "Rails Server",
+			"onAutoForward": "notify"
+		}
+	},
+	"postCreateCommand": "bundle install && rails db:create && rails db:migrate",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"shopify.ruby-lsp",
+				"bradlc.vscode-tailwindcss",
+				"ms-vscode.vscode-json",
+				"formulahendry.auto-rename-tag",
+				"esbenp.prettier-vscode"
+			],
+			"settings": {
+				"ruby.lsp.formatter": "rubocop",
+				"ruby.lsp.linters": ["rubocop"],
+				"files.associations": {
+					"*.slim": "slim"
+				}
+			}
+		}
+	},
+	"remoteUser": "vscode"
+}
