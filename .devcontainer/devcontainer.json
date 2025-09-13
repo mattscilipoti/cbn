@@ -7,7 +7,7 @@
 	"workspaceFolder": "/workspace",
 	"forwardPorts": [3000],
 	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
-	"workspaceFolder": "/workspace"
+	"workspaceFolder": "/workspace",
 	"portsAttributes": {
 		"3000": {
 			"label": "Rails Server",
