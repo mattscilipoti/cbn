@@ -1,0 +1,46 @@
+# Use the existing Dockerfile as base, but customize for development
+FROM ruby:3.2
+
+# Install system dependencies including imagemagick for image processing
+RUN apt-get update -qq && \
+    apt-get install -y \
+      build-essential \
+      libvips-dev \
+      imagemagick \
+      libmagickwand-dev \
+      nodejs \
+      npm \
+      git \
+      sqlite3 \
+      libsqlite3-dev \
+      curl \
+      && rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user
+RUN groupadd --gid 1000 vscode \
+    && useradd --uid 1000 --gid vscode --shell /bin/bash --create-home vscode
+
+# Set up the workspace directory
+WORKDIR /workspace
+
+# Copy Gemfile and install gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Install latest rails
+RUN gem install rails
+
+# Copy the rest of the application
+COPY . .
+
+# Change ownership to vscode user
+RUN chown -R vscode:vscode /workspace
+
+# Switch to vscode user
+USER vscode
+
+# Expose port 3000
+EXPOSE 3000
+
+# Start the Rails server
+CMD ["rails", "server", "-b", "0.0.0.0"]

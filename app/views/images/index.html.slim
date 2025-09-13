@@ -1,0 +1,19 @@
+h2 Recently Created Paint-by-Numbers
+
+- if @images.any?
+  .gallery
+    - @images.each do |image|
+      .gallery-item
+        = link_to shared_image_path(image.share_token), style: "text-decoration: none; color: inherit;"
+          - if image.paint_by_number_image.attached?
+            = image_tag image.paint_by_number_image, alt: image.title
+          - elsif image.pixelated_image.attached?
+            = image_tag image.pixelated_image, alt: image.title
+          .title = image.title
+- else
+  p style="text-align: center; color: #666; margin: 40px 0;"
+    | No paint-by-number images yet. 
+    = link_to "Create your first one!", new_image_path, class: "btn"
+
+.download-section
+  = link_to "Create New Paint-by-Number", new_image_path, class: "btn"
